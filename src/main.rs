@@ -20,6 +20,7 @@ use invaders::{
 use rusty_audio::Audio;
 
 fn main() -> Result<(), io::Error> {
+    // Load audios
     let mut audio = Audio::new();
     audio.add("explode", "explode.mp3");
     audio.add("game-over", "game-over.mp3");
@@ -27,7 +28,7 @@ fn main() -> Result<(), io::Error> {
     audio.add("move", "move.mp3");
     audio.add("shoot", "shoot.mp3");
     audio.add("win", "win.mp3");
-
+    // Play the game start audio
     audio.play("game-start");
 
     // Terminal
