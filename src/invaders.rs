@@ -4,11 +4,14 @@ use rusty_time::timer::Timer;
 
 use crate::{frame::Drawable, NUM_COLS, NUM_ROWS};
 
+/// An invader represents an enemy ship
 pub struct Invader {
     pub x: usize,
     pub y: usize,
 }
 
+/// Invaders holds the entire invaders and movement timer for them
+/// along with direction they are currently moving
 pub struct Invaders {
     pub army: Vec<Invader>,
     move_timer: Timer,
@@ -16,6 +19,7 @@ pub struct Invaders {
 }
 
 impl Invaders {
+    /// Creates new Invaders army
     pub fn new() -> Self {
         let mut army = Vec::new();
         for x in 0..NUM_COLS {
@@ -33,11 +37,11 @@ impl Invaders {
         }
         Self {
             army,
-            move_timer: Timer::from_millis(250),
+            move_timer: Timer::from_millis(2000),
             direction: 1,
         }
     }
-
+    /// Updates army details for each frame
     pub fn update(&mut self, delta: Duration) -> bool {
         self.move_timer.update(delta);
         if self.move_timer.ready {
@@ -75,15 +79,15 @@ impl Invaders {
 
         false
     }
-
+    /// Whether all invader army is killed or not
     pub fn all_killed(&self) -> bool {
         self.army.is_empty()
     }
-
+    /// Whether the invaders have reached the bottom of the screen or not
     pub fn reached_bottom(&self) -> bool {
         self.army.iter().map(|invader| invader.y).max().unwrap_or(0) >= NUM_ROWS - 1
     }
-
+    /// Kill an invader at specific `x` and `y` coordinates
     pub fn kill_invader_at(&mut self, x: usize, y: usize) -> bool {
         if let Some(index) = self
             .army
@@ -105,9 +109,9 @@ impl Drawable for Invaders {
                 / self.move_timer.duration.as_secs_f32())
                 > 0.5
             {
-                "x"
+                "V"
             } else {
-                "+"
+                "v"
             };
         }
     }

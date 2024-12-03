@@ -9,6 +9,7 @@ use crossterm::{
 
 use crate::frame::Frame;
 
+/// Render items to the frame
 pub fn render(stdout: &mut Stdout, last_frame: &Frame, current_frame: &Frame, force: bool) {
     if force {
         stdout.queue(SetBackgroundColor(Color::Blue)).unwrap();
