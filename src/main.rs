@@ -1,7 +1,7 @@
 use std::{io, sync::mpsc, thread::{self, spawn}, time::{Duration, Instant}};
 
 use crossterm::{cursor::{Hide, Show}, event::{self, Event, KeyCode}, terminal::{self, EnterAlternateScreen, LeaveAlternateScreen}, ExecutableCommand};
-use invaders::{frame::{self, new_frame, Drawable}, player::Player, render::render};
+use invaders::{frame::{self, new_frame, Drawable}, invaders::Invaders, player::Player, render::render};
 use rusty_audio::Audio;
 
 fn main() -> Result<(), io::Error> {
@@ -40,6 +40,7 @@ fn main() -> Result<(), io::Error> {
 
     let mut player = Player::new();
     let mut instant = Instant::now();
+    let mut invaders = Invaders::new();
     // Game Loop
     'gameloop: loop {
         // per frame init
@@ -68,11 +69,31 @@ fn main() -> Result<(), io::Error> {
 
         // Updates
         player.update(delta);
+        if invaders.update(delta) {
+            audio.play("move");
+        }
+        if player.detect_hits(&mut invaders){
+            audio.play("explode");
+        }
 
         // Draw & render section
-        player.draw(&mut curr_frame);
+        let drawables: Vec<&dyn Drawable> = vec![&player, & invaders];
+        for drawable in drawables {
+            drawable.draw(&mut curr_frame);
+        }
         let _ = render_tx.send(curr_frame);
         thread::sleep(Duration::from_millis(1));
+
+        // Win or Lose section
+        if invaders.all_killed() {
+            audio.play("win");
+            break 'gameloop
+        }
+
+        if invaders.reached_bottom() {
+            audio.play("game-over");
+            break 'gameloop
+        }
     }
 
 
