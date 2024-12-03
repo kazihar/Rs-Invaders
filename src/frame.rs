@@ -17,6 +17,6 @@ pub fn new_frame() -> Frame {
 }
 
 // Define drawable trait so that everything can be drawn to display
-pub trait Drawable{
+pub trait Drawable {
     fn draw(&self, frame: &mut Frame);
 }
