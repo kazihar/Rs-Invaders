@@ -50,12 +50,10 @@ impl Player {
         let mut hit_something = false;
 
         for shot in self.shots.iter_mut() {
-            if !shot.exploding {
-                if invaders.kill_invader_at(shot.x, shot.y) {
+                if !shot.exploding && invaders.kill_invader_at(shot.x, shot.y) {
                     hit_something = true;
                     shot.explode();
                 }
-            }
         }
 
         hit_something

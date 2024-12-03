@@ -32,7 +32,7 @@ impl Invaders {
             }
         }
         Self {
-            army: army,
+            army,
             move_timer: Timer::from_millis(250),
             direction: 1,
         }

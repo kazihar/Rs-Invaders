@@ -1,7 +1,7 @@
 use std::{
     io,
     sync::mpsc,
-    thread::{self, spawn},
+    thread::{self},
     time::{Duration, Instant},
 };
 
